@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"></script>
+    <title>Document</title>
+    <style>
+        .content{
+            background-color:rgb(247, 245, 245);
+            width:80%;
+            margin:auto;
+        }
+        .innerOuter{
+            border:1px solid lightgray;
+            width:80%;
+            margin:auto;
+            padding:5% 15%;
+            background:white;
+        }
+        
+        #enrollForm>table{width:100%;}
+        #enrollForm>table *{ margin:5px;}
+    </style>
+</head>
+<body>
+
+    <!-- 이쪽에 메뉴바 포함 할꺼임 -->
+    <jsp:include page=""/>
+
+    <div class="content">
+        <br><br>
+        <div class="innerOuter">
+            <h2>게시글 작성하기</h2>
+            <br>
+
+            <form id="enrollForm" method="post" action="" enctype="">
+                <table align="center">
+                    <tr>
+                        <th><label for="title">제목</label></th>
+                        <td><input type="text" id="title" class="form-control" name="" required></td>
+                    </tr>
+                    <tr>
+                        <th><label for="writer">작성자</label></th>
+                        <td><input type="text" id="writer" class="form-control" value="user01" name="" readonly></td>
+                    </tr>
+                    <tr>
+                        <th><label for="upfile">첨부파일</label></th>
+                        <td><input type="file" id="upfile" class="form-control-file border" name=""></td>
+                    </tr>
+                    <tr>
+                        <th colspan="2"><label for="content">내용</label></th>
+                    </tr>
+                    <tr>
+                        <th colspan="2"><textarea class="form-control" required name="" id="content" rows="10" style="resize:none;"></textarea></th>
+                    </tr>
+                </table>
+                <br>
+
+                <div align="center">
+                    <button type="submit" class="btn btn-primary">등록하기</button>
+                    <button type="reset" class="btn btn-danger">취소하기</button>
+                </div>
+            </form>
+        </div>
+        <br><br>
+    </div>
+
+    <!-- 이쪽에 푸터바 포함할꺼임 -->
+    <jsp:include page=""/>
+
+</body>
+</html>

@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper 
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="adminMapper">
+
+	<resultMap type="memberDto" id="memberResult">
+		<id column="USER_NO" property="userNo" />
+		<result column="USER_ID" property="userId" />
+		<result column="USER_PWD" property="userPwd" />
+		<result column="USER_NAME" property="userName" />
+		<result column="EMAIL" property="email" />
+		<result column="GENDER" property="gender" />
+		<result column="PHONE" property="phone" />
+		<result column="ADDRESS" property="address" />
+		<result column="PROFILE_URL" property="profileURL" />
+		<result column="SIGNUP_DATE" property="signupDt" />
+		<result column="MODIFY_DATE" property="modifyDt" />
+		<result column="STATUS" property="status" />
+	</resultMap>
+
+	<select id="selectMemberListCount" resultType="_int">
+		select
+				   count(*)
+		  from member
+		 where status in ('Y', 'A')
+	</select>
+	
+	<select id="selectMemberList" resultMap="memberResult">
+		select
+		       profile_url
+		     , user_no
+		     , user_name
+		     , email
+		     , gender
+		     , phone
+		     , address
+		     , to_char(signup_date, 'YYYY-MM-DD') signup_date
+		     , status
+		  from member
+		 where status in ('A', 'Y')
+	</select>
+	
+	<select id="ajaxFilterMemberListCount" resultType="_int">
+		select
+				   count(*)
+			from member
+		 where status in ('Y', 'A')
+		<if test="userName != ''">
+		 and user_name LIKE '%' || #{userName} || '%'
+		</if>
+		<if test="status != ''">
+			and status = #{status}
+		</if>
+	</select>
+	
+	<select id="ajaxFilterMemberList" resultMap="memberResult">
+		select
+		       profile_url
+		     , user_no
+		     , user_name
+		     , email
+		     , gender
+		     , phone
+		     , address
+		     , to_char(signup_date, 'YYYY-MM-DD') signup_date
+		     , status
+		  from member
+		 where status in ('A', 'Y')
+		 <if test="m.userName != ''">
+		 	and user_name LIKE '%' || #{m.userName} || '%'
+		 </if>
+		 <if test="m.status != ''">
+		 	and status = #{m.status}
+		 </if>
+	</select>
+	
+	<select id="memberDetail" resultMap="memberResult">
+		select
+					 user_no
+				 , user_id
+				 , user_name
+				 , phone
+				 , address
+			from member
+		 where user_no = #{memNo}
+	</select>
+	
+	<update id="updateMember">
+		update member
+			 set user_name = #{userName}
+			   , phone = #{phone}
+			   , address = #{address}
+		 where user_no = #{userNo}
+	</update>
+
+</mapper>

@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper 
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="memberMapper">
+
+	<resultMap id="memberResult" type="MemberDto">
+		<id column="user_no" property="userNo" />
+		<result column="user_id" property="userId" />
+		<result column="user_Pwd" property="userPwd" />
+		<result column="user_name" property="userName" />
+		<result column="email" property="email" />
+		<result column="gender" property="gender" />
+		<result column="phone" property="phone" />
+		<result column="address" property="address" />
+		<result column="profile_url" property="profileURL" />
+		<result column="signup_date" property="signupDt" />
+		<result column="modify_date" property="modifyDt" />
+		<result column="status" property="status" />
+	</resultMap>
+	
+	<!-- 로그인용 -->
+	<select id="selectMember" resultMap="memberResult">
+		<!-- * 암호화 적용전 -->
+		<!-- 		
+		select
+					 user_no, user_id, user_pwd
+				 , user_name, email, gender
+				 , phone, address, profile_url
+				 , signup_date, modify_date
+			from member
+		 where status in ('Y', 'A')
+		   and user_id = #{userId}
+		   and user_pwd = #{userPwd} 
+		-->
+		
+		<!-- * 암호화 적용후 -->
+		select
+					 user_no, user_id, user_pwd
+				 , user_name, email, gender
+				 , phone, address, profile_url
+				 , signup_date, modify_date, status
+			from member
+		 where status in ('Y', 'A')
+		   and user_id = #{userId}
+	</select>
+	
+	<!-- 아아디 중복체크용 -->
+	<select id="selectUserIdCount" resultType="_int">
+		select
+					 count(*)
+			from member
+		 where user_id = #{checkId}
+	</select>
+	<!-- 회원가입용 -->
+	<insert id="insertMember">
+		insert
+		  into member
+		  (
+		  	user_no
+		  , user_id
+		  , user_pwd
+		  , user_name
+		  , email
+		  , gender
+		  , phone
+		  , address
+		  )
+		  values
+		  (
+		  	seq_uno.nextval
+		  , #{userId}
+		  , #{userPwd}
+		  , #{userName}
+		  , #{email}
+		  , #{gender}
+		  , #{phone}
+		  , #{address}
+		  )
+	</insert>
+	<!-- 프로필이미지만 따로 변경 -->
+	<update id="updateProfileImg">
+		update member
+		   set profile_url = #{profileURL}
+		     , modify_date = sysdate
+		 where user_id = #{userId}
+	</update>
+
+	<!-- 회원정보 수정용 -->
+	<update id="updateMember">
+		update member
+		   set user_name = #{userName}
+		     , email = #{email}
+		   	 , phone = #{phone}
+		   	 , address = #{address}
+		   	 , gender = #{gender}
+		   	 , modify_date = sysdate
+		 where user_id = #{userId}
+	</update>
+	<!-- 회원탈퇴용 -->
+	<update id="deleteMember">
+		update member
+		   set status = 'N'
+		 where user_id = #{userId}
+	</update>
+	
+	<!-- 비밀번호변경 -->
+	<update id="updatePwd">
+		update
+					 member
+			 set user_pwd = #{userPwd}
+			   , modify_date = sysdate
+		 where user_id = #{userId}
+	</update>
+</mapper>
